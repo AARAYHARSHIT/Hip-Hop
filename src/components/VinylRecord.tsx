@@ -5,13 +5,13 @@ import vinylLabel from '../assets/YoursTruly2.jpg';
 
 export default function VinylRecord() {
   const groupRef = useRef<THREE.Group>(null);
-  const groupMeshRef = useRef<THREE.Group>(null);
+  const meshRef = useRef<THREE.Group>(null);
   
   const texture = useLoader(THREE.TextureLoader, vinylLabel);
   texture.anisotropy = 16;
 
   useFrame((state) => {
-    if (!groupRef.current || !groupMeshRef.current) return;
+    if (!groupRef.current || !meshRef.current) return;
 
     // Capture cursor coordinates normalized between -1 and 1
     const { x, y } = state.pointer;
@@ -21,12 +21,12 @@ export default function VinylRecord() {
     groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, (Math.PI / 6) - (y * 0.3), 0.05);
     
     // Continuous subtle turntable rotation
-    groupMeshRef.current.rotation.y += 0.005;
+    meshRef.current.rotation.y += 0.005;
   });
 
   return (
     <group ref={groupRef}>
-      <group ref={groupMeshRef}>
+      <group ref={meshRef}>
         {/* Vinyl Base Vinyl Plate Geometry */}
         <mesh castShadow receiveShadow>
           <cylinderGeometry args={[2, 2, 0.08, 128]} />
