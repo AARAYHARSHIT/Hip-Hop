@@ -1,8 +1,13 @@
+/* stylelint-disable at-rule-no-unknown */
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Anton&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
 
+/* stylelint-disable at-rule-no-unknown */
+/* stylelint-disable */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* stylelint-enable */
+/* stylelint-enable at-rule-no-unknown */
 
 :root {
   color-scheme: dark;
@@ -104,3 +109,36 @@ body {
 
 /* Canvas container */
 canvas { touch-action: pan-y; }
+
+/* Add to the bottom of your index.css */
+
+/* Hide default cursor globally */
+body {
+  cursor: none;
+  scroll-behavior: smooth; /* Native smooth scrolling */
+}
+
+/* Custom Cursor Styling */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e11d48;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+  mix-blend-mode: difference;
+}
+
+/* Make cursor larger when hovering over interactive elements */
+a:hover ~ .custom-cursor,
+button:hover ~ .custom-cursor,
+.cursor-hover:hover ~ .custom-cursor {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(225, 29, 72, 0.2);
+}

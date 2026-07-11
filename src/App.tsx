@@ -42,6 +42,28 @@ export default function App() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+
+const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
+
+
+useEffect(() => {
+  const handleMouseMove = (e: MouseEvent) => {
+    setMousePos({
+      x: (e.clientX / window.innerWidth - 0.5) * 20,
+      y: (e.clientY / window.innerHeight - 0.5) * 20,
+    });
+    setCursorPos({ x: e.clientX, y: e.clientY }); // Track raw pixel coordinates
+  };
+  window.addEventListener('mousemove', handleMouseMove);
+  return () => window.removeEventListener('mousemove', handleMouseMove);
+}, []);
+
+
+<div 
+  className="custom-cursor hidden md:block" 
+  style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }} 
+/>
+
   return (
     <div className="min-h-screen text-white font-sans overflow-x-hidden selection:bg-rose-600">
       
