@@ -120,25 +120,66 @@ export default function App() {
             ))}
           </div>
 
-          {/* Right Monitor Panel (Tilting Canvas) */}
-          <div className="lg:col-span-5 h-full flex items-center justify-center pointer-events-auto">
+          {/* Premium Image Canvas Component */}
+          <div className="lg:col-span-5 h-full flex items-center justify-center pointer-events-auto relative">
+            
+            {/* The 3D Hover Card Container */}
             <div 
-              className="w-full bg-[#111113]/90 backdrop-blur-sm border border-neutral-800 p-6 shadow-2xl transition-all duration-200 ease-out"
+              className="w-full relative group shadow-2xl transition-transform duration-200 ease-out"
               style={{
-                transform: `rotateY(${mousePos.x}deg) rotateX(${-mousePos.y}deg)`,
+                transform: `perspective(1000px) rotateY(${mousePos.x * 0.5}deg) rotateX(${-mousePos.y * 0.5}deg)`,
                 transformStyle: 'preserve-3d'
               }}
             >
-              <div className="aspect-square w-full bg-neutral-900 overflow-hidden relative border border-neutral-800 mb-6">
-                <img src={activeTrack.image} alt={activeTrack.title} className="w-full h-full object-cover" />
-              </div>
-              <div className="flex justify-between items-center font-mono">
-                <div>
-                  <span className="text-[10px] text-rose-500 uppercase tracking-widest block">// ARCHIVE FILE</span>
-                  <span className="text-sm font-bold uppercase">{activeTrack.title}</span>
+              {/* Dynamic Glare Effect */}
+              <div 
+                className="absolute inset-0 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay"
+                style={{
+                  background: `radial-gradient(circle at ${50 + mousePos.x * 2}% ${50 + mousePos.y * 2}%, rgba(255,255,255,0.4) 0%, transparent 60%)`,
+                  transform: 'translateZ(20px)'
+                }}
+              />
+
+              {/* The Brutalist Frame */}
+              <div 
+                className="bg-[#111113]/90 backdrop-blur-md border-2 border-neutral-800 p-4"
+                style={{ transform: 'translateZ(0px)' }}
+              >
+                <div className="aspect-square w-full bg-neutral-900 overflow-hidden relative border border-black mb-4 shadow-inner">
+                  {/* The Artwork */}
+                  <img 
+                    src={activeTrack.image} 
+                    alt={activeTrack.title} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    style={{ transform: 'translateZ(-10px)' }}
+                  />
+                  
+                  {/* Inner Overlay Tech Details */}
+                  <div 
+                    className="absolute top-4 right-4 bg-black/90 px-2 py-1 font-mono text-[9px] text-rose-500 tracking-widest uppercase border border-white/10"
+                    style={{ transform: 'translateZ(30px)' }}
+                  >
+                    VOL // 0{activeTrack.id}
+                  </div>
                 </div>
-                <span className="text-xs text-neutral-500 font-bold">[{activeTrack.year}]</span>
+
+                <div 
+                  className="flex justify-between items-end font-mono"
+                  style={{ transform: 'translateZ(15px)' }}
+                >
+                  <div>
+                    <span className="text-[10px] text-rose-500 uppercase tracking-widest block mb-1">// ARCHIVE FILE</span>
+                    <span className="text-xl font-black uppercase tracking-tight text-white">{activeTrack.title}</span>
+                  </div>
+                  <span className="text-sm text-neutral-500 font-bold mb-1">[{activeTrack.year}]</span>
+                </div>
               </div>
+              
+              {/* Heavy Drop Shadow for physical presence */}
+              <div 
+                className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[90%] h-8 bg-black/60 blur-xl -z-10"
+                style={{ transform: 'translateZ(-50px)' }}
+              />
             </div>
           </div>
 
