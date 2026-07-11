@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Disc, Layers, ShoppingBag, Ticket, ExternalLink, ArrowRight } from 'lucide-react';
+import { Disc, Layers, ShoppingBag, Ticket, ArrowRight } from 'lucide-react';
 import Scene from './components/Scene';
 
 import prarthanaImg from './assets/Prarthana.jpg';
@@ -29,11 +29,11 @@ const discography: Track[] = [
 
 export default function App() {
   const [activeTrack, setActiveTrack] = useState<Track>(discography[1]);
-  const [mousePos, setMouseMousePos] = useState({ x: 0, y: 0 });
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMouseMousePos({
+      setMousePos({
         x: (e.clientX / window.innerWidth - 0.5) * 20,
         y: (e.clientY / window.innerHeight - 0.5) * 20,
       });
@@ -43,10 +43,18 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#060608] text-white font-sans overflow-x-hidden selection:bg-rose-600">
+    <div className="min-h-screen text-white font-sans overflow-x-hidden selection:bg-rose-600">
+      
+      {/* Base Background */}
+      <div className="fixed inset-0 -z-20 bg-[#060608]" />
+
+      {/* GLOBAL FIXED 3D CANVAS */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <Scene />
+      </div>
       
       {/* Navigation */}
-      <header className="fixed top-0 left-0 w-full z-50 px-8 py-5 flex justify-between items-center mix-blend-difference">
+      <header className="fixed top-0 left-0 w-full z-50 px-8 py-5 flex justify-between items-center mix-blend-difference pointer-events-auto">
         <div className="text-xl font-black tracking-tighter font-mono">KR$NA // PROJECTS</div>
         <nav className="hidden md:flex space-x-12 text-xs font-mono tracking-widest text-neutral-400 uppercase">
           <a href="#viewport" className="hover:text-rose-500 transition-colors">01 // WebGL Space</a>
@@ -58,15 +66,12 @@ export default function App() {
         </button>
       </header>
 
-      {/* Hero Viewport */}
-      <section id="viewport" className="relative h-screen w-full flex items-center bg-black">
-        <div className="absolute inset-0 z-0">
-          <Scene />
-        </div>
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#060608] via-transparent to-transparent opacity-90" />
+      {/* Hero Viewport (Transparent to show 3D underneath) */}
+      <section id="viewport" className="relative h-screen w-full flex items-center pointer-events-none">
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#060608] via-[#060608]/80 to-transparent opacity-90 pointer-events-none" />
         
-        <div className="relative z-20 pl-12 md:pl-24 pointer-events-none select-none max-w-2xl">
-          <span className="text-rose-500 font-mono text-xs tracking-widest uppercase block mb-4">// RAW UNGROUND INTERACTIVE LAYER</span>
+        <div className="relative z-20 pl-12 md:pl-24 select-none max-w-2xl pointer-events-auto">
+          <span className="text-rose-500 font-mono text-xs tracking-widest uppercase block mb-4">// RAW UNDERGROUND INTERACTIVE LAYER</span>
           <h1 className="text-8xl md:text-9xl font-black tracking-tighter leading-none uppercase text-white mb-6">
             REAL <br/>
             <span className="text-transparent stroke-text bg-clip-text bg-gradient-to-b from-neutral-100 to-neutral-700">TALK</span>
@@ -77,11 +82,19 @@ export default function App() {
         </div>
       </section>
 
-      {/* Discography Grid */}
-      <section id="discography" className="py-32 px-8 max-w-7xl mx-auto relative z-20">
+      {/* Marquee Ticker */}
+      <div className="w-full bg-rose-600 py-2.5 overflow-hidden whitespace-nowrap border-y border-white/10 relative z-20">
+        <div className="inline-block animate-marquee font-mono text-xs tracking-widest text-black font-black uppercase">
+          PRARTHANA • YOURS TRULY • STILL HERE • TIME WILL TELL • FAR FROM OVER • JOOTA JAPANI • NO CAP • PRARTHANA • YOURS TRULY • STILL HERE • TIME WILL TELL • FAR FROM OVER • JOOTA JAPANI • NO CAP •
+        </div>
+      </div>
+
+      {/* Discography Section (Transparent right side for 3D overlap) */}
+      <section id="discography" className="py-32 px-8 max-w-7xl mx-auto relative z-20 pointer-events-none">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           
-          <div className="lg:col-span-7 space-y-4">
+          {/* Left Audio Stack */}
+          <div className="lg:col-span-7 space-y-4 pointer-events-auto">
             <div className="mb-8">
               <span className="text-rose-500 font-mono text-xs tracking-widest block uppercase mb-1">// INDEX 02</span>
               <h2 className="text-4xl font-black uppercase tracking-tight">THE AUDIO STACK</h2>
@@ -92,7 +105,7 @@ export default function App() {
                 key={track.id}
                 onMouseEnter={() => setActiveTrack(track)}
                 className={`group p-6 border-b flex justify-between items-center cursor-pointer transition-all duration-300 ${
-                  activeTrack.id === track.id ? 'border-rose-500 bg-neutral-900/20 pl-4' : 'border-neutral-800 hover:border-neutral-500'
+                  activeTrack.id === track.id ? 'border-rose-500 bg-[#121214] pl-4' : 'border-neutral-800 bg-[#0a0a0c]/80 hover:border-neutral-500 hover:bg-[#121214]'
                 }`}
               >
                 <div className="flex items-center space-x-6">
@@ -107,10 +120,10 @@ export default function App() {
             ))}
           </div>
 
-          {/* Premium Image Canvas Component */}
-          <div className="lg:col-span-5 h-full flex items-center justify-center">
+          {/* Right Monitor Panel (Tilting Canvas) */}
+          <div className="lg:col-span-5 h-full flex items-center justify-center pointer-events-auto">
             <div 
-              className="w-full bg-[#111113] border border-neutral-800 p-6 shadow-2xl transition-all duration-200 ease-out"
+              className="w-full bg-[#111113]/90 backdrop-blur-sm border border-neutral-800 p-6 shadow-2xl transition-all duration-200 ease-out"
               style={{
                 transform: `rotateY(${mousePos.x}deg) rotateX(${-mousePos.y}deg)`,
                 transformStyle: 'preserve-3d'
@@ -132,54 +145,37 @@ export default function App() {
         </div>
       </section>
 
-      {/* Merch and Staging Shell */}
-      <section id="merch" className="py-32 bg-[#0b0b0d] border-t border-neutral-900 px-8 relative z-20">
+      {/* Solid Merch Section */}
+      <section id="merch" className="py-32 bg-[#0b0b0d] border-t border-neutral-900 px-8 relative z-20 pointer-events-auto">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16">
             <div>
               <span className="text-rose-500 font-mono text-xs tracking-widest block uppercase mb-1">// SYSTEM SUBSYSTEM 03</span>
               <h2 className="text-4xl font-black uppercase tracking-tight">COMMERCE HOOKS</h2>
             </div>
-            <p className="font-mono text-xs text-neutral-500 max-w-xs uppercase tracking-wide mt-4 md:mt-0">
-              Wireframe slots configured for Stripe billing API integration and live database synchronization hooks.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            {/* Merch Wireframe */}
-            <div className="border border-neutral-800 p-8 bg-neutral-950/40 flex justify-between items-center group hover:border-rose-500 transition-colors">
+            <div className="border border-neutral-800 p-8 bg-neutral-950/40 flex justify-between items-center group hover:border-rose-500 transition-colors cursor-pointer">
               <div className="space-y-4">
                 <ShoppingBag className="w-8 h-8 text-neutral-600 group-hover:text-rose-500 transition-colors" />
                 <div>
-                  <h3 className="text-xl font-black uppercase tracking-tight">01 // Limited Apparel Drops</h3>
-                  <p className="text-xs font-mono text-neutral-500 uppercase mt-1">E-Commerce infrastructure pipeline ready.</p>
+                  <h3 className="text-xl font-black uppercase tracking-tight">01 // Limited Apparel</h3>
                 </div>
               </div>
-              <ExternalLink className="text-neutral-700 group-hover:text-white transition-colors w-4 h-4" />
             </div>
 
-            {/* Ticket Wireframe */}
-            <div className="border border-neutral-800 p-8 bg-neutral-950/40 flex justify-between items-center group hover:border-rose-500 transition-colors">
+            <div className="border border-neutral-800 p-8 bg-neutral-950/40 flex justify-between items-center group hover:border-rose-500 transition-colors cursor-pointer">
               <div className="space-y-4">
                 <Ticket className="w-8 h-8 text-neutral-600 group-hover:text-rose-500 transition-colors" />
                 <div>
-                  <h3 className="text-xl font-black uppercase tracking-tight">02 // Live Ticketing Portal</h3>
-                  <p className="text-xs font-mono text-neutral-500 uppercase mt-1">RSVP mapping data matrices active.</p>
+                  <h3 className="text-xl font-black uppercase tracking-tight">02 // Live Ticketing</h3>
                 </div>
               </div>
-              <ExternalLink className="text-neutral-700 group-hover:text-white transition-colors w-4 h-4" />
             </div>
-
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-8 bg-black px-8 flex flex-col sm:flex-row justify-between items-center text-[10px] font-mono text-neutral-600 tracking-widest uppercase border-t border-neutral-950 relative z-20">
-        <div>© 2026 KR$NA PORTFOLIO ENGINE</div>
-        <div className="mt-2 sm:mt-0">Built via React Three Fiber + Tailwind CSS</div>
-      </footer>
     </div>
   );
 }
