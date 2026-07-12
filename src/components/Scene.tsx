@@ -1,7 +1,8 @@
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import VinylRecord from './VinylRecord';
-import Particles from './particles';
+import Particles from './Particles';
+import { TicketStub, MerchBox } from './CommerceElements';
 
 export default function Scene() {
   return (
