@@ -89,7 +89,7 @@ export default function App() {
 
       {/* GLOBAL FIXED 3D CANVAS */}
       <div className="fixed inset-0 -z-10 pointer-events-none">
-        <Scene />
+        <Scene activeTexture={activeTrack.image} />
       </div>
       
       {/* Navigation */}
