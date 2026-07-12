@@ -51,22 +51,52 @@ export default function App() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Simulated API Call
-  const handleCheckout = (e: React.FormEvent) => {
+  // Real Backend API Call Integration
+  const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate network request delay (Replace this with axios/fetch later)
-    setTimeout(() => {
+    // Grab values directly from the form event targets
+    const form = e.target as HTMLFormElement;
+    const name = (form.elements[0] as HTMLInputElement).value;
+    const email = (form.elements[1] as HTMLInputElement).value;
+    const selection = (form.elements[2] as HTMLSelectElement).value;
+
+    try {
+      // Send the data to your local Node.js / Express server
+      const response = await fetch('http://localhost:5000/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          orderType: modalType,
+          selection
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
       setIsSubmitting(false);
       setIsSuccess(true);
       
-      // Auto-close modal after success
+      // Auto-close modal after successful database injection
       setTimeout(() => {
         setIsModalOpen(false);
         setIsSuccess(false);
+        form.reset(); // Clear the form inputs
       }, 3000);
-    }, 2000);
+
+    } catch (error) {
+      console.error('Transaction Failed:', error);
+      setIsSubmitting(false);
+      // You can add a setErrorMessage state here later to show UI failure alerts
+      alert("Database connection failed. Ensure your Express server is running on port 5000.");
+    }
   };
 
   const openModal = (type: 'merch' | 'ticket') => {
