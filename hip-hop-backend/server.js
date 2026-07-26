@@ -10,6 +10,11 @@ app.use(express.json());
 // Temporary in-memory database
 const orders = [];
 
+// A simple GET route for the root URL
+app.get('/', (req, res) => {
+  res.send('🔥 KR$NA Backend API Engine is live and routing traffic.');
+});
+
 // The API Route your React frontend is trying to hit
 app.post('/api/checkout', (req, res) => {
   const { name, email, orderType, selection } = req.body;
