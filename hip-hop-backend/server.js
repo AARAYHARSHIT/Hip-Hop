@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 // 1. Connect to MongoDB
-// Note: We are using a local URI for now. You will swap this for your Atlas URI later.
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/krsna_portfolio';
+//Pulling the URI directly from process.env with a safety fallback
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('🟢 MongoDB Matrix Connected Successfully'))
