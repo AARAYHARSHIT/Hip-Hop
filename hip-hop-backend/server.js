@@ -1,48 +1,31 @@
-require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
-const Order = require('./models/Order');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// 1. Connect to MongoDB
-//Pulling the URI directly from process.env with a safety fallback
-const MONGO_URI = process.env.MONGO_URI;
-
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('🟢 MongoDB Matrix Connected Successfully'))
-  .catch(err => console.error('🔴 MongoDB Connection Error:', err));
-
-// 2. Status Route
+// Basic health check route
 app.get('/', (req, res) => {
   res.send('🔥 KR$NA Backend API Engine is live and routing traffic.');
 });
 
-// 3. The Live Checkout API Route
-app.post('/api/checkout', async (req, res) => {
+// Mock Checkout Route (No Database)
+app.post('/api/checkout', (req, res) => {
   try {
     const { name, email, orderType, selection } = req.body;
     
-    console.log(`\n📦 PROCESSING NEW ${orderType.toUpperCase()} ORDER...`);
+    console.log(`\n📦 PROCESSING NEW ORDER...`);
+    console.log(`Name: ${name}`);
+    console.log(`Email: ${email}`);
+    console.log(`Selection: ${selection}`);
     
-    // Create a new document using our Mongoose Model
-    const newOrder = new Order({ 
-      name, 
-      email, 
-      orderType, 
-      selection 
-    });
+    // Simulate a successful save without actually using a database
+    console.log(`✅ Order processed successfully for: ${email}`);
     
-    // Save it permanently to the database
-    await newOrder.save();
-    
-    console.log(`✅ Order saved for: ${email}`);
+    // Send the success response back to the frontend
     res.status(201).json({ message: 'Transaction Successful: Data mapped to core.' });
-    
   } catch (error) {
     console.error('Transaction Failed:', error);
     res.status(500).json({ error: 'Server Error during transaction.' });
