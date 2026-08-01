@@ -99,7 +99,8 @@ Open a new, second terminal, ensure you are in the Root Directory (HIP-HOP/), an
 # npm run dev
 Click the http://localhost:5173 link in the terminal to open the site in your browser.
 
-🛠️ Current Development State
+🛠️ Current Development State-
+
 Database: MongoDB has currently been bypassed. The backend uses a mock checkout route that successfully captures frontend form data and logs it to the terminal without requiring a database connection.
 
 API Routing: Frontend POST requests are routed perfectly to the Express server.
